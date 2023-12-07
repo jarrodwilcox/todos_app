@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  todos_app:
+    build:
+      context: ./JW_TODOS
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - myvol:/JW_TODOS
+    networks:
+      - surface_network
+
+  nginx:
+    build:
+      context: ./NGINX
+      dockerfile: Dockerfile
+    depends_on:
+      - todos_app
+    ports:
+      - "80:80"
+    volumes:
+      - ./NGINX/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - surface_network
+
+volumes:
+  myvol:
+
+networks:
+  surface_network:
+    driver: bridge
